@@ -1,0 +1,27 @@
+flowchart TD
+  receive_request[Receive request]
+  discover_tools[Discover MCP tools]
+  validate_args[Validate arguments]
+  policy_decision{Policy and approval}
+  execute_tool[Execute with timeout]
+  timeout_decision{Client timed out}
+  reconcile_status[Read durable status]
+  verify_result[Verify generation]
+  write_audit[Append audit]
+  escalate[Escalate to a person]
+  deny_request[Deny request]
+  operation_store[Operation state file]
+  receive_request -->|request control| discover_tools
+  discover_tools -->|tool list data| validate_args
+  validate_args -->|arguments control| policy_decision
+  policy_decision -->|permit control| execute_tool
+  policy_decision -->|deny control| deny_request
+  execute_tool -->|operation state| operation_store
+  execute_tool -->|reply control| timeout_decision
+  timeout_decision -->|timeout control| reconcile_status
+  timeout_decision -->|reply control| verify_result
+  reconcile_status -->|completed data| verify_result
+  reconcile_status -->|still running control| escalate
+  verify_result -->|event state| write_audit
+  escalate -->|escalation state| write_audit
+  deny_request -->|denial state| write_audit

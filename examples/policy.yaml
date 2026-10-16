@@ -1,0 +1,18 @@
+actors:
+  operator:
+    role: operator
+  reader:
+    role: reader
+tools:
+  get_service_health:
+    approval: false
+    roles: [operator, reader]
+  inspect_logs:
+    approval: false
+    roles: [operator, reader]
+  restart_demo_service:
+    approval: true
+    roles: [operator]
+  get_operation_status:
+    approval: false
+    roles: [operator, reader]

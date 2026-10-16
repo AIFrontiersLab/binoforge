@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1880" height="940" viewBox="0 0 1880 940">
+<rect width="100%" height="100%" fill="rgb(11, 31, 51)"/>
+<rect x="40" y="156" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="40" y="280" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(90, 160, 190)" stroke-width="3"/>
+<rect x="40" y="404" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="660" y="156" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="660" y="280" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="1280" y="156" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(90, 160, 190)" stroke-width="3"/>
+<rect x="1280" y="280" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="1280" y="404" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="1280" y="528" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="1280" y="652" width="520" height="108" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<text x="40" y="60" fill="rgb(244, 241, 234)" font-size="32" font-family="Arial" font-weight="700">Components  ·  MCP Operations Gateway</text>
+<text x="40" y="90" fill="rgb(186, 204, 220)" font-size="18" font-family="Arial" font-weight="400">Blue border: checked against a source. Gold border: proposed design.</text>
+<text x="40" y="134" fill="rgb(230, 180, 80)" font-size="24" font-family="Arial" font-weight="700">Request intake</text>
+<text x="56" y="190" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">CLI intake</text>
+<text x="56" y="212" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Accept the actor, tool, reason and idempotency key.</text>
+<text x="56" y="314" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">MCP discovery</text>
+<text x="56" y="336" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">List tools from a local MCP server over stdio.</text>
+<text x="56" y="438" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Argument check</text>
+<text x="56" y="460" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Reject missing or oversized arguments.</text>
+<text x="660" y="134" fill="rgb(230, 180, 80)" font-size="24" font-family="Arial" font-weight="700">Policy and approval</text>
+<text x="676" y="190" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Identity policy</text>
+<text x="676" y="212" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Allow the tool only for a matching role.</text>
+<text x="676" y="314" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Approval gate</text>
+<text x="676" y="336" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Hold restart until an explicit approval flag is set.</text>
+<text x="1280" y="134" fill="rgb(230, 180, 80)" font-size="24" font-family="Arial" font-weight="700">Execution and recovery</text>
+<text x="1296" y="190" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">MCP executor</text>
+<text x="1296" y="212" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Call the selected tool with a timeout.</text>
+<text x="1296" y="314" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Operation store</text>
+<text x="1296" y="336" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Persist operation state before a delayed reply.</text>
+<text x="1296" y="438" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Result check</text>
+<text x="1296" y="460" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Confirm service generation and duplicate status.</text>
+<text x="1296" y="562" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Recovery</text>
+<text x="1296" y="584" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Poll status inside a bound and escalate if it stays running.</text>
+<text x="1296" y="686" fill="rgb(244, 241, 234)" font-size="20" font-family="Arial" font-weight="700">Audit log</text>
+<text x="1296" y="708" fill="rgb(186, 204, 220)" font-size="16" font-family="Arial" font-weight="400">Append permit, timeout, reconcile and escalation events.</text>
+</svg>

@@ -1,0 +1,1 @@
+Overview of MCP Operations Gateway. Three blocks in order. Request intake takes CLI request and produces validated tool call. Policy and approval takes validated tool call and produces permit or denial. Execution and recovery takes permitted tool call and produces verified result or escalation.

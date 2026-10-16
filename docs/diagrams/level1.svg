@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="760" viewBox="0 0 1800 760">
+<rect width="100%" height="100%" fill="rgb(11, 31, 51)"/>
+<line x1="580" y1="280.0" x2="642" y2="280.0" stroke="rgb(143, 180, 214)" stroke-width="3"/>
+<line x1="1140" y1="280.0" x2="1202" y2="280.0" stroke="rgb(143, 180, 214)" stroke-width="3"/>
+<rect x="100" y="140" width="480" height="280" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="660" y="140" width="480" height="280" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<rect x="1220" y="140" width="480" height="280" rx="12" fill="rgb(20, 50, 79)" stroke="rgb(230, 180, 80)" stroke-width="3"/>
+<text x="48" y="70" fill="rgb(244, 241, 234)" font-size="34" font-family="Arial" font-weight="700">Overview  ·  MCP Operations Gateway</text>
+<text x="124" y="196" fill="rgb(244, 241, 234)" font-size="28" font-family="Arial" font-weight="700">Request intake</text>
+<text x="124" y="232" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">In: CLI request</text>
+<text x="124" y="260" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">Out: validated tool call</text>
+<text x="684" y="196" fill="rgb(244, 241, 234)" font-size="28" font-family="Arial" font-weight="700">Policy and approval</text>
+<text x="684" y="232" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">In: validated tool call</text>
+<text x="684" y="260" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">Out: permit or denial</text>
+<text x="1244" y="196" fill="rgb(244, 241, 234)" font-size="28" font-family="Arial" font-weight="700">Execution and recovery</text>
+<text x="1244" y="232" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">In: permitted tool call</text>
+<text x="1244" y="260" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">Out: verified result or escalation</text>
+<text x="48" y="708" fill="rgb(186, 204, 220)" font-size="20" font-family="Arial" font-weight="400">Gold marks proposed structure. Inputs and outputs are the local demo contract.</text>
+</svg>

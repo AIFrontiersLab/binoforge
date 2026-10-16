@@ -1,0 +1,26 @@
+flowchart TB
+  subgraph intake [Request intake]
+    cli_intake[CLI intake]
+    mcp_discovery[MCP discovery]
+    argument_validator[Argument check]
+  end
+  subgraph policy [Policy and approval]
+    identity_policy[Identity policy]
+    approval_gate[Approval gate]
+  end
+  subgraph execution [Execution and recovery]
+    mcp_executor[MCP executor]
+    operation_store[Operation store]
+    result_verifier[Result check]
+    recovery[Recovery]
+    audit_log[Audit log]
+  end
+  cli_intake -->|request| argument_validator
+  argument_validator -->|tool name| mcp_discovery
+  mcp_discovery -->|tool list| identity_policy
+  identity_policy -->|role decision| approval_gate
+  approval_gate -->|permit| mcp_executor
+  mcp_executor -->|operation id| operation_store
+  mcp_executor -->|tool result| result_verifier
+  result_verifier -->|timeout or result| recovery
+  recovery -->|audit event| audit_log
