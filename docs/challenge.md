@@ -8,13 +8,13 @@ Python 3.12; The mcp package.
 
 ## Setup
 
-Install the reference package, then read `starter/`.
+Install the package, then read `starter/`.
 
 ## Starter mode
 
 starter/ops_gateway/reconcile.py raises StarterGap.
 
-## Reference solution
+## Complete behavior
 
 src/ops_gateway/reconcile.py polls status and escalates inside a bound.
 

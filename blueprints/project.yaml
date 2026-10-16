@@ -37,7 +37,7 @@ challenge:
   statement: The restart succeeds, but the client times out before receiving confirmation.
     Decide how to reconcile durable state without issuing a second restart.
 components:
-- basis: proposed
+- basis: design
   block_id: intake
   id: cli_intake
   name: CLI intake
@@ -47,17 +47,17 @@ components:
   id: mcp_discovery
   name: MCP discovery
   responsibility: List tools from a local MCP server over stdio.
-- basis: proposed
+- basis: design
   block_id: intake
   id: argument_validator
   name: Argument check
   responsibility: Reject missing or oversized arguments.
-- basis: proposed
+- basis: design
   block_id: policy
   id: identity_policy
   name: Identity policy
   responsibility: Allow the tool only for a matching role.
-- basis: proposed
+- basis: design
   block_id: policy
   id: approval_gate
   name: Approval gate
@@ -67,34 +67,34 @@ components:
   id: mcp_executor
   name: MCP executor
   responsibility: Call the selected tool with a timeout.
-- basis: proposed
+- basis: design
   block_id: execution
   id: operation_store
   name: Operation store
   responsibility: Persist operation state before a delayed reply.
-- basis: proposed
+- basis: design
   block_id: execution
   id: result_verifier
   name: Result check
   responsibility: Confirm service generation and duplicate status.
-- basis: proposed
+- basis: design
   block_id: execution
   id: recovery
   name: Recovery
   responsibility: Poll status inside a bound and escalate if it stays running.
-- basis: proposed
+- basis: design
   block_id: execution
   id: audit_log
   name: Audit log
   responsibility: Append permit, timeout, reconcile and escalation events.
 decisions:
-- basis: proposed
+- basis: design
   id: durable_before_delay
   text: The simulated service writes the operation result before the delayed reply.
-- basis: proposed
+- basis: design
   id: stable_operation_id
   text: The operation id is a hash of the actor, tool and idempotency key.
-- basis: proposed
+- basis: design
   id: router_note
   text: MOCK design note. This is not live research.
 demo:
@@ -324,7 +324,7 @@ state:
 - id: audit_log
   name: Audit log
   owner: recovery
-title: MCP Operations Gateway
+title: Binoforge
 topic:
   focus: ''
   id: 16

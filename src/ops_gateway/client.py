@@ -13,6 +13,9 @@ from mcp.client.stdio import stdio_client
 from mcp.shared.exceptions import MCPError
 
 from ops_gateway.audit import append
+from ops_gateway.budget import CallBudget
+from ops_gateway.journal import note
+from ops_gateway.outbox import enqueue
 from ops_gateway.policy import evaluate, load_policy, validate_arguments
 from ops_gateway.reconcile import reconcile_after_timeout
 
@@ -30,6 +33,9 @@ class Gateway:
         self.policy = load_policy(policy_path)
         self.state_path = state_path
         self.audit_path = audit_path
+        self.journal_path = audit_path.with_name("journal.jsonl")
+        self.outbox_path = audit_path.with_name("outbox.jsonl")
+        self.budget = CallBudget()
 
     def run(
         self,
@@ -108,6 +114,7 @@ class Gateway:
         return [tool.name for tool in listed.tools]
 
     async def _call(self, tool: str, arguments: dict, timeout: float) -> dict:
+        self.budget.take(tool)
         async with stdio_client(self._params()) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
@@ -115,13 +122,14 @@ class Gateway:
         return _payload(result)
 
     def _params(self) -> StdioServerParameters:
+        src = str(Path(__file__).resolve().parents[1])
+        inherited = os.environ.get("PYTHONPATH")
         env = {
             "OPS_STATE_PATH": str(self.state_path),
             "OPS_MODE": os.environ.get("OPS_MODE", "normal"),
             "OPS_RESTART_DELAY_SECONDS": os.environ.get("OPS_RESTART_DELAY_SECONDS", "0"),
+            "PYTHONPATH": src if not inherited else inherited + os.pathsep + src,
         }
-        if os.environ.get("PYTHONPATH"):
-            env["PYTHONPATH"] = os.environ["PYTHONPATH"]
         return StdioServerParameters(
             command=os.environ.get("OPS_PYTHON", sys.executable),
             args=["-m", "ops_gateway.mcp_server"],
@@ -130,6 +138,9 @@ class Gateway:
 
     def _audit(self, event: dict) -> None:
         append(self.audit_path, event)
+        note(self.journal_path, event)
+        if event.get("event") in {"reconciled", "escalate", "denied"}:
+            enqueue(self.outbox_path, event)
         LOGGER.info("%s", event["event"])
 
 

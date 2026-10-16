@@ -10,16 +10,16 @@ Scenario: An operations agent can discover a restart tool. The restart must stil
 
 ## Components
 
-- CLI intake (proposed): Accept the actor, tool, reason and idempotency key.
+- CLI intake (design): Accept the actor, tool, reason and idempotency key.
 - MCP discovery (documented): List tools from a local MCP server over stdio.
-- Argument check (proposed): Reject missing or oversized arguments.
-- Identity policy (proposed): Allow the tool only for a matching role.
-- Approval gate (proposed): Hold restart until an explicit approval flag is set.
+- Argument check (design): Reject missing or oversized arguments.
+- Identity policy (design): Allow the tool only for a matching role.
+- Approval gate (design): Hold restart until an explicit approval flag is set.
 - MCP executor (documented): Call the selected tool with a timeout.
-- Operation store (proposed): Persist operation state before a delayed reply.
-- Result check (proposed): Confirm service generation and duplicate status.
-- Recovery (proposed): Poll status inside a bound and escalate if it stays running.
-- Audit log (proposed): Append permit, timeout, reconcile and escalation events.
+- Operation store (design): Persist operation state before a delayed reply.
+- Result check (design): Confirm service generation and duplicate status.
+- Recovery (design): Poll status inside a bound and escalate if it stays running.
+- Audit log (design): Append permit, timeout, reconcile and escalation events.
 
 ## Flows
 
@@ -102,4 +102,4 @@ flowchart TD
 - `docs/diagrams/level3.png` is the execution and recovery flow.
 - Each level also has Mermaid, SVG and a text description.
 
-Gold marks proposed design. Blue marks behavior checked against a source.
+Gold marks the local design. Blue marks behavior checked against a source.

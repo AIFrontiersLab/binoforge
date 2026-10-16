@@ -10,7 +10,7 @@
 
 - The installed mcp 2.3.0 package exposes MCPServer and a stdio ClientSession.call_tool timeout.
 
-## Proposed decisions
+## Design decisions
 
 - The simulated service writes the operation result before the delayed reply.
 - The operation id is a hash of the actor, tool and idempotency key.

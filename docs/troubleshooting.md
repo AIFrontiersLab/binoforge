@@ -11,7 +11,7 @@ python -m pip install -e .
 ## Tests fail in starter/
 
 Starter tests are supposed to fail until the challenge is implemented.
-Run `pytest -q` for the reference solution.
+Run `pytest -q` for the package in `src/`.
 
 ## Timeout looks immediate
 
