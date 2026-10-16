@@ -29,6 +29,74 @@ Failure and recovery: client times out; new session reads durable status; escala
 
 ## Diagrams
 
+```mermaid
+flowchart LR
+  intake[Request intake]
+  policy[Policy and approval]
+  intake --> policy
+  execution[Execution and recovery]
+  policy --> execution
+```
+
+```mermaid
+flowchart TB
+  subgraph intake [Request intake]
+    cli_intake[CLI intake]
+    mcp_discovery[MCP discovery]
+    argument_validator[Argument check]
+  end
+  subgraph policy [Policy and approval]
+    identity_policy[Identity policy]
+    approval_gate[Approval gate]
+  end
+  subgraph execution [Execution and recovery]
+    mcp_executor[MCP executor]
+    operation_store[Operation store]
+    result_verifier[Result check]
+    recovery[Recovery]
+    audit_log[Audit log]
+  end
+  cli_intake -->|request| argument_validator
+  argument_validator -->|tool name| mcp_discovery
+  mcp_discovery -->|tool list| identity_policy
+  identity_policy -->|role decision| approval_gate
+  approval_gate -->|permit| mcp_executor
+  mcp_executor -->|operation id| operation_store
+  mcp_executor -->|tool result| result_verifier
+  result_verifier -->|timeout or result| recovery
+  recovery -->|audit event| audit_log
+```
+
+```mermaid
+flowchart TD
+  receive_request[Receive request]
+  discover_tools[Discover MCP tools]
+  validate_args[Validate arguments]
+  policy_decision{Policy and approval}
+  execute_tool[Execute with timeout]
+  timeout_decision{Client timed out}
+  reconcile_status[Read durable status]
+  verify_result[Verify generation]
+  write_audit[Append audit]
+  escalate[Escalate to a person]
+  deny_request[Deny request]
+  operation_store[Operation state file]
+  receive_request -->|request control| discover_tools
+  discover_tools -->|tool list data| validate_args
+  validate_args -->|arguments control| policy_decision
+  policy_decision -->|permit control| execute_tool
+  policy_decision -->|deny control| deny_request
+  execute_tool -->|operation state| operation_store
+  execute_tool -->|reply control| timeout_decision
+  timeout_decision -->|timeout control| reconcile_status
+  timeout_decision -->|reply control| verify_result
+  reconcile_status -->|completed data| verify_result
+  reconcile_status -->|still running control| escalate
+  verify_result -->|event state| write_audit
+  escalate -->|escalation state| write_audit
+  deny_request -->|denial state| write_audit
+```
+
 - `docs/diagrams/level1.png` is the three-block overview.
 - `docs/diagrams/level2.png` is the component architecture.
 - `docs/diagrams/level3.png` is the execution and recovery flow.
