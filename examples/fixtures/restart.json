@@ -1,0 +1,6 @@
+{
+  "actor": "operator",
+  "tool": "restart_demo_service",
+  "reason": "recover the demo service",
+  "idempotency_key": "demo"
+}

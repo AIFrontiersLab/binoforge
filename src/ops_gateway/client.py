@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import json
 import logging
 import os
@@ -12,20 +11,18 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from mcp.shared.exceptions import MCPError
 
+from ops_gateway.approval.gate import authorize
 from ops_gateway.audit import append
-from ops_gateway.budget import CallBudget
-from ops_gateway.journal import note
-from ops_gateway.outbox import enqueue
-from ops_gateway.policy import evaluate, load_policy, validate_arguments
-from ops_gateway.reconcile import reconcile_after_timeout
+from ops_gateway.identity.operation_key import operation_id
+from ops_gateway.mcp.arguments import for_tool
+from ops_gateway.notify.dispatch import fanout
+from ops_gateway.observe.meter import meter
+from ops_gateway.operations.verify import verify_restart
+from ops_gateway.policy import load_policy
+from ops_gateway.recovery.controller import after_timeout
 
 LOGGER = logging.getLogger("ops_gateway")
 READ_TOOLS = {"get_service_health", "inspect_logs", "get_operation_status"}
-
-
-def operation_id(actor: str, tool: str, idempotency_key: str) -> str:
-    digest = hashlib.sha256(f"{actor}|{tool}|{idempotency_key}".encode("utf-8")).hexdigest()[:16]
-    return f"op_{digest}"
 
 
 class Gateway:
@@ -35,7 +32,7 @@ class Gateway:
         self.audit_path = audit_path
         self.journal_path = audit_path.with_name("journal.jsonl")
         self.outbox_path = audit_path.with_name("outbox.jsonl")
-        self.budget = CallBudget()
+        self.budget = meter()
 
     def run(
         self,
@@ -50,13 +47,7 @@ class Gateway:
     ) -> int:
         op_id = operation_id(actor, tool, idempotency_key)
         arguments = {"operation_id": op_id, "reason": reason, "limit": limit}
-        try:
-            arguments = validate_arguments(tool, arguments)
-        except ValueError as exc:
-            self._audit({"event": "denied", "actor": actor, "tool": tool, "reason": str(exc)})
-            print(json.dumps({"status": "denied", "reason": str(exc)}))
-            return 1
-        permitted, why = evaluate(self.policy, actor, tool, approved)
+        permitted, why, arguments = authorize(self.policy, actor, tool, approved, arguments)
         if not permitted:
             self._audit({"event": "denied", "actor": actor, "tool": tool, "reason": why})
             print(json.dumps({"status": "denied", "reason": why}))
@@ -77,7 +68,7 @@ class Gateway:
             timed_out = True
             self._audit({"event": "timeout", "operation_id": op_id, "tool": tool})
         if timed_out or payload.get("state") == "running":
-            decision = reconcile_after_timeout(self._status_sync, op_id, attempts=3)
+            decision = after_timeout(self._status_sync, op_id, attempts=3)
             record = decision.get("record") or {}
             if decision["outcome"] == "reconciled" and record.get("state") == "completed":
                 self._audit({"event": "reconciled", "operation_id": op_id, "state": "completed"})
@@ -99,9 +90,7 @@ class Gateway:
         return 0
 
     def _verify(self, payload: dict) -> bool:
-        if payload.get("duplicate"):
-            return payload.get("state") == "completed" and int(payload.get("restart_count") or 0) >= 1
-        return payload.get("state") == "completed" and int(payload.get("restart_count") or 0) == 1
+        return verify_restart(payload)
 
     def _status_sync(self, op_id: str) -> dict:
         return asyncio.run(self._call("get_operation_status", {"operation_id": op_id}, 5))
@@ -138,9 +127,7 @@ class Gateway:
 
     def _audit(self, event: dict) -> None:
         append(self.audit_path, event)
-        note(self.journal_path, event)
-        if event.get("event") in {"reconciled", "escalate", "denied"}:
-            enqueue(self.outbox_path, event)
+        fanout(self.journal_path, self.outbox_path, event)
         LOGGER.info("%s", event["event"])
 
 
@@ -155,13 +142,7 @@ def _is_timeout(exc: BaseException) -> bool:
 
 
 def _tool_arguments(tool: str, arguments: dict) -> dict:
-    if tool == "restart_demo_service":
-        return {"operation_id": arguments["operation_id"], "reason": arguments["reason"]}
-    if tool == "get_operation_status":
-        return {"operation_id": arguments["operation_id"]}
-    if tool == "inspect_logs":
-        return {"limit": arguments["limit"]}
-    return {}
+    return for_tool(tool, arguments)
 
 
 def _payload(result) -> dict:

@@ -28,16 +28,19 @@ The demo uses local fixtures. Network access is not required.
 
 ## Layout
 
-- `policy` checks the actor, the role and the approval flag.
-- `store` keeps the operation id and the service generation.
-- `audit` records permit, timeout, reconcile and escalation.
-- `reconcile` polls status inside a fixed bound.
-- `mcp_server` exposes the local service tools.
-- `limits` loads the local attempt and score bounds.
-- `store` writes the checkpoint with an atomic replace.
-- `audit` appends one line after a commit.
-- `policy` denies empty input and instruction text.
-- `budget` stops a step after the configured attempts.
+- `identity` names actors and builds a stable operation id.
+- `approval` checks the role and the approval flag.
+- `operations` stores the service generation and duplicate state.
+- `recovery` polls status inside a fixed bound.
+- `observe` records the audit, the journal and the call budget.
+- `mcp` exposes the local service tools.
+- `application` builds the local run context.
+- `config` loads the local, drill and quiet profiles.
+- `domain` holds the policy chain and the step state machine.
+- `infrastructure` writes checkpoints, snapshots and the audit log.
+- `services` charges attempts, checks step order and builds the report.
+- `docs/adr` records the checkpoint, input and recovery decisions.
+- `docs/runbooks` covers the demo, the crash drill and a policy denial.
 
 - `docs/architecture.md` has the Mermaid diagrams for the overview, the components and the recovery flow.
 - `docs/operations.md` covers local state, retries and the failure drill.

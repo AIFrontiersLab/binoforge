@@ -1,0 +1,5 @@
+{
+  "actor": "reader",
+  "tool": "get_service_health",
+  "reason": "read health"
+}
